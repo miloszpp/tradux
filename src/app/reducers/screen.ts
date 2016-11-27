@@ -1,27 +1,11 @@
 import { Action } from 'redux';
 
-import { Actions, AddOrderAction, Direction } from '../actions';
+import { Order, Transaction, Direction } from '../model';
+import { Actions, AddOrderAction } from '../actions';
 
 export interface ScreenState {
     transactions: Transaction[];
     activeOrders: Order[];
-}
-
-export interface Transaction {
-    product: string;
-    buyer: string;
-    seller: string;
-    quantity: number;
-    price: number;
-    date: Date;
-}
-
-export interface Order {
-    user: string;
-    product: string;
-    quantity: number;
-    price: number;
-    direction: Direction;
 }
 
 const initialState: ScreenState = {

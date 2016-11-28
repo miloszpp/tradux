@@ -1,0 +1,51 @@
+import { Component, OnInit, Inject } from '@angular/core';
+import { Store } from 'redux';
+
+import { AppState } from '../reducers';
+import { Transaction } from '../model';
+
+@Component({
+  selector: 'app-transaction-log',
+  template: `
+    <div class="panel panel-default">
+      <div class="panel-heading">Transaction log</div>
+      <div class="panel-body">
+        <table class="table table-striped">
+          <tr>
+            <th>Product</th>
+            <th>Direction</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Buyer</th>
+            <th>Seller</th>
+            <th>Date</th>
+          </tr>
+          <tr *ngFor="let transaction of transactions">
+            <td>{{ transaction.product }}</td>
+            <td>{{ transaction.direction }}</td>
+            <td>{{ transaction.price }}</td>
+            <td>{{ transaction.quantity }}</td>
+            <td>{{ transaction.buyer }}</td>
+            <td>{{ transaction.seller }}</td>
+            <td>{{ transaction.date | date: 'dd/MM/yyyy' }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  `,
+  styles: []
+})
+export class TransactionLogComponent implements OnInit {
+  private transactions: Transaction[];
+
+  constructor(
+    @Inject('AppStore') private store: Store<AppState>
+  ) { }
+
+  ngOnInit() {
+    this.store.subscribe(() => {
+      this.transactions = this.store.getState().screen.transactions;
+    });
+  }
+
+}

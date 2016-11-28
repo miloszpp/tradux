@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { rootReducer, AppState } from './reducers';
 import { OrderFormComponent } from './order-form/order-form.component';
 import { OrderBookComponent } from './order-book/order-book.component';
+import { TransactionLogComponent } from './transaction-log/transaction-log.component';
 
 const appStore: Store<AppState> = createStore(rootReducer);
 
@@ -15,7 +16,8 @@ const appStore: Store<AppState> = createStore(rootReducer);
   declarations: [
     AppComponent,
     OrderFormComponent,
-    OrderBookComponent
+    OrderBookComponent,
+    TransactionLogComponent
   ],
   imports: [
     BrowserModule,

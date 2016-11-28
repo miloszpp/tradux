@@ -117,4 +117,20 @@ describe('OrderFormComponent', () => {
         expect(newState.activeOrders.length).toBe(2);
     });
 
+    it('should match only one order', () => {
+        const action = addOrder(
+            "user",
+            "gold",
+            100,
+            100,
+            Direction.Sell
+        );
+        const initial = {
+            transactions: [],
+            activeOrders: [ sampleOrder, Object.assign({}, sampleOrder) ]
+        }
+        const newState = screen(initial, action);
+        expect(newState.transactions.length).toBe(1);
+    });
+
 });

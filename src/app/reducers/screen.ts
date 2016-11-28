@@ -24,13 +24,12 @@ export function screen(state = initialState, action: Action) {
 }
 
 function addOrder(state: ScreenState, action: AddOrderAction): ScreenState {
+    if (action.quantity === 0) {
+        return state;
+    }
     const matching = findMatchingOrder(state.activeOrders, action);
     if (matching === null) {
-        if (action.quantity === 0) {
-            return state;
-        } else {
-            return Object.assign({}, state, { activeOrders: [ ...state.activeOrders, orderFromAddAction(action) ] });
-        }
+        return Object.assign({}, state, { activeOrders: [ ...state.activeOrders, orderFromAddAction(action) ] });
     } else {
         const transaction: Transaction = {
             product: action.product,

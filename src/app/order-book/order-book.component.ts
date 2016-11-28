@@ -7,20 +7,25 @@ import { Order } from '../model';
 @Component({
   selector: 'app-order-book',
   template: `
-    <table class="table table-striped">
-      <tr>
-        <th>Product</th>
-        <th>Direction</th>
-        <th>Price</th>
-        <th>Quantity</th>
-      </tr>
-      <tr *ngFor="let order of orders">
-        <td>{{ order.product }}</td>
-        <td>{{ order.direction }}</td>
-        <td>{{ order.price }}</td>
-        <td>{{ order.quantity }}</td>
-      </tr>
-    </table>
+    <div class="panel panel-default">
+      <div class="panel-heading">Order book</div>
+      <div class="panel-body">
+        <table class="table table-striped">
+          <tr>
+            <th>Product</th>
+            <th>Direction</th>
+            <th>Price</th>
+            <th>Quantity</th>
+          </tr>
+          <tr *ngFor="let order of orders">
+            <td>{{ order.product }}</td>
+            <td>{{ order.direction }}</td>
+            <td>{{ order.price }}</td>
+            <td>{{ order.quantity }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
   `,
   styles: []
 })

@@ -13,7 +13,6 @@ import { Transaction } from '../model';
         <table class="table table-striped">
           <tr>
             <th>Product</th>
-            <th>Direction</th>
             <th>Price</th>
             <th>Quantity</th>
             <th>Buyer</th>
@@ -22,7 +21,6 @@ import { Transaction } from '../model';
           </tr>
           <tr *ngFor="let transaction of transactions">
             <td>{{ transaction.product }}</td>
-            <td>{{ transaction.direction }}</td>
             <td>{{ transaction.price }}</td>
             <td>{{ transaction.quantity }}</td>
             <td>{{ transaction.buyer }}</td>

@@ -15,7 +15,12 @@ import { AddOrderAction, addOrder } from '../actions';
           <form>
             <div class="form-group">
               <label for="product">Product</label>
-              <input #product type="text" class="form-control" id="product" placeholder="Product" />
+              <select #product class="form-control" id="product">
+                <option value="crystals">Crystals</option>
+                <option value="mithril">Mithril</option>
+                <option value="mercury">Mercury</option>
+                <option value="credits">Credits</option>
+              </select>
             </div>
             <div class="form-group">
               <label for="direction">Direction</label>
@@ -26,11 +31,11 @@ import { AddOrderAction, addOrder } from '../actions';
             </div>
             <div class="form-group">
               <label for="quantity">Quantity</label>
-              <input #quantity type="number" class="form-control" id="quantity" placeholder="Quantity" />
+              <input #quantity type="number" class="form-control" id="quantity" placeholder="Quantity" min="1" />
             </div>
             <div class="form-group">
               <label for="price">Price</label>
-              <input #price type="number" class="form-control" id="price" placeholder="Price" />
+              <input #price type="number" class="form-control" id="price" placeholder="Price" min="1" />
             </div>
             <button 
               type="submit" 
@@ -60,7 +65,8 @@ export class OrderFormComponent implements OnInit {
       product, 
       parseInt(quantity), 
       parseInt(price), 
-      parseInt(direction)
+      parseInt(direction),
+      new Date()
     ));
   }
 

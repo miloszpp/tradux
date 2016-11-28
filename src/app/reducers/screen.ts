@@ -42,7 +42,7 @@ function addOrder(state: ScreenState, action: AddOrderAction): ScreenState {
         };
         const matchingOrderIndex = state.activeOrders.indexOf(matching);
         const updatedTransactions = [ ...state.transactions, transaction ];
-        if (action.quantity > matching.quantity) {
+        if (action.quantity >= matching.quantity) {
             return addOrder(
                 {
                     transactions: updatedTransactions,
@@ -71,7 +71,13 @@ function findMatchingOrder(orders: Order[], action: AddOrderAction): Order | nul
 }
 
 function orderFromAddAction(action: AddOrderAction): Order {
-    return action;
+    return {
+        direction: action.direction,
+        price: action.price,
+        product: action.product,
+        quantity: action.quantity,
+        user: action.user
+    };
 }
 
 function insertItem<T>(array: T[], item: T, index: number): T[] {

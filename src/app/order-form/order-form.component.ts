@@ -49,8 +49,14 @@ export class OrderFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  addOrder(product: string, direction: Direction, quantity: number, price: number) {
-    this.store.dispatch(addOrder("milosz", product, quantity, price, direction));
+  addOrder(product: string, direction: string, quantity: string, price: string) {
+    this.store.dispatch(addOrder(
+      "milosz", 
+      product, 
+      parseInt(quantity), 
+      parseInt(price), 
+      parseInt(direction)
+    ));
   }
 
 }

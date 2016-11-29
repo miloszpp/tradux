@@ -37,7 +37,7 @@ function addOrder(state: ScreenState, action: AddOrderAction): ScreenState {
             seller: action.direction === Direction.Sell ? action.user : matching.user,
             quantity: Math.min(matching.quantity, action.quantity),
             price: matching.price,
-            date: action.timestamp,
+            date: action.timestamp
         };
         const matchingOrderIndex = state.activeOrders.indexOf(matching);
         const updatedTransactions = [ ...state.transactions, transaction ];

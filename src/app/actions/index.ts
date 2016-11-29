@@ -12,7 +12,7 @@ export interface AddOrderAction extends Action {
     quantity: number;
     price: number;
     direction: Direction;
-    timestamp: Date;
+    timestamp: number;
 }
 
 export function addOrder(
@@ -21,7 +21,7 @@ export function addOrder(
     quantity: number,
     price: number,
     direction: Direction,
-    timestamp: Date
+    timestamp: number
     ): AddOrderAction {
         return { user, product, quantity, price, direction, type: Actions.addOrder, timestamp }
     }

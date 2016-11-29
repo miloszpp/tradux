@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Store } from 'redux';
+import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
 import { AppState } from '../reducers';
 import { Direction } from '../model';
@@ -31,11 +32,11 @@ import { AddOrderAction, addOrder } from '../actions';
             </div>
             <div class="form-group">
               <label for="quantity">Quantity</label>
-              <input #quantity type="number" class="form-control" id="quantity" placeholder="Quantity" min="1" />
+              <input #quantity type="number" class="form-control" id="quantity" placeholder="Quantity" min="1" required />
             </div>
             <div class="form-group">
               <label for="price">Price</label>
-              <input #price type="number" class="form-control" id="price" placeholder="Price" min="1" />
+              <input #price type="number" class="form-control" id="price" placeholder="Price" min="1" required />
             </div>
             <button 
               type="submit" 
@@ -53,20 +54,20 @@ import { AddOrderAction, addOrder } from '../actions';
 export class OrderFormComponent implements OnInit {
 
   constructor(
-    @Inject('AppStore') private store: Store<AppState>
+    private af: AngularFire
   ) { }
 
   ngOnInit() {
   }
 
   addOrder(product: string, direction: string, quantity: string, price: string) {
-    this.store.dispatch(addOrder(
+    this.af.database.list('/events').push(addOrder(
       "milosz", 
       product, 
       parseInt(quantity), 
       parseInt(price), 
       parseInt(direction),
-      new Date()
+      Date.now()
     ));
   }
 

@@ -4,7 +4,7 @@ export interface Transaction {
     seller: string;
     quantity: number;
     price: number;
-    date: Date;
+    date: number;
 }
 
 export interface Order {

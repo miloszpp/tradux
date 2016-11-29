@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, NgZone } from '@angular/core';
 import { Store } from 'redux';
 
 import { AppState } from '../reducers';
@@ -33,8 +33,11 @@ export class OrderBookComponent implements OnInit {
   private orders: Order[];
 
   constructor(
-    @Inject('AppStore') private store: Store<AppState>
-  ) { }
+    @Inject('AppStore') private store: Store<AppState>,
+    public zone: NgZone
+  ) {
+    this.orders = [];
+  }
 
   ngOnInit() {
     this.store.subscribe(() => {

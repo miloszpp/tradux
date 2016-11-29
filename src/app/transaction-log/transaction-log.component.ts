@@ -25,7 +25,7 @@ import { Transaction } from '../model';
             <td>{{ transaction.quantity }}</td>
             <td>{{ transaction.buyer }}</td>
             <td>{{ transaction.seller }}</td>
-            <td>{{ transaction.date | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ transaction.date | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
           </tr>
         </table>
       </div>
@@ -42,7 +42,9 @@ export class TransactionLogComponent implements OnInit {
 
   ngOnInit() {
     this.store.subscribe(() => {
-      this.transactions = this.store.getState().screen.transactions;
+      const transactions = this.store.getState().screen.transactions.slice(0);
+      transactions.sort((a, b) => b.date - a.date);
+      this.transactions = transactions.slice(0, 5);
     });
   }
 

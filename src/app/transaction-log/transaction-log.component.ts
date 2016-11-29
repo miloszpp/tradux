@@ -21,7 +21,7 @@ import { Transaction } from '../model';
           </tr>
           <tr *ngFor="let transaction of transactions">
             <td>{{ transaction.product }}</td>
-            <td>{{ transaction.price }}</td>
+            <td>\${{ transaction.price }}</td>
             <td>{{ transaction.quantity }}</td>
             <td>{{ transaction.buyer }}</td>
             <td>{{ transaction.seller }}</td>

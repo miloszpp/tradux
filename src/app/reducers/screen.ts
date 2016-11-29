@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { Order, Transaction, Direction } from '../model';
+import { Order, Transaction, Direction, ProductPrice } from '../model';
 import { Actions, AddOrderAction } from '../actions';
 
 export interface ScreenState {

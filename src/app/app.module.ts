@@ -10,6 +10,7 @@ import { rootReducer, AppState } from './reducers';
 import { OrderFormComponent } from './order-form/order-form.component';
 import { OrderBookComponent } from './order-book/order-book.component';
 import { TransactionLogComponent } from './transaction-log/transaction-log.component';
+import { OrderScreenComponent } from './order-screen/order-screen.component';
 
 const appStore: Store<AppState> = createStore(rootReducer);
 
@@ -25,7 +26,8 @@ export const firebaseConfig = {
     AppComponent,
     OrderFormComponent,
     OrderBookComponent,
-    TransactionLogComponent
+    TransactionLogComponent,
+    OrderScreenComponent
   ],
   imports: [
     BrowserModule,

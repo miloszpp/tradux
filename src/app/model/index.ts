@@ -15,6 +15,12 @@ export interface Order {
     direction: Direction;
 }
 
+export interface ProductPrice {
+    product: string;
+    ask: number;
+    bid: number;
+}
+
 export enum Direction {
     Buy,
     Sell

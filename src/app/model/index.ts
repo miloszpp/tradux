@@ -21,7 +21,18 @@ export interface ProductPrice {
     bid: number;
 }
 
+export interface ProductQuantity {
+    product: string;
+    quantity: number;
+}
+
+export type PriceDictionary = { [id: string]: number };
+
+export type QuantityDictionary = { [id: string]: number };
+
 export enum Direction {
     Buy,
     Sell
 }
+
+export const Products = [ 'mithril', 'crystals', 'mercury', 'credits' ];

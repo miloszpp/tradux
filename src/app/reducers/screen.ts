@@ -1,16 +1,20 @@
 import { Action } from 'redux';
+import * as _ from "lodash";
 
-import { Order, Transaction, Direction, ProductPrice } from '../model';
+import { Order, Transaction, Direction, PriceDictionary } from '../model';
 import { Actions, AddOrderAction } from '../actions';
+
 
 export interface ScreenState {
     transactions: Transaction[];
     activeOrders: Order[];
+    avgPrices: { prices: PriceDictionary, timestamp: number }[]
 }
 
 const initialState: ScreenState = {
     transactions: [],
-    activeOrders: []
+    activeOrders: [],
+    avgPrices: []
 };
 
 export function screen(state = initialState, action: Action) {
@@ -29,7 +33,9 @@ function addOrder(state: ScreenState, action: AddOrderAction): ScreenState {
     }
     const matching = findMatchingOrder(state.activeOrders, action);
     if (matching === null) {
-        return Object.assign({}, state, { activeOrders: [ ...state.activeOrders, orderFromAddAction(action) ] });
+        const activeOrders = insertItem(state.activeOrders, orderFromAddAction(action));
+        const avgPrices = { prices: calculateAveragePrices(activeOrders), timestamp: action.timestamp };
+        return Object.assign({}, state, { activeOrders: activeOrders, avgPrices: insertItem(state.avgPrices, avgPrices) });
     } else {
         const transaction: Transaction = {
             product: action.product,
@@ -42,21 +48,38 @@ function addOrder(state: ScreenState, action: AddOrderAction): ScreenState {
         const matchingOrderIndex = state.activeOrders.indexOf(matching);
         const updatedTransactions = [ ...state.transactions, transaction ];
         if (action.quantity >= matching.quantity) {
+            const activeOrders = removeItem(state.activeOrders, matchingOrderIndex);
+            const avgPrices = { prices: calculateAveragePrices(activeOrders), timestamp: action.timestamp };
             return addOrder(
                 {
                     transactions: updatedTransactions,
-                    activeOrders: removeItem(state.activeOrders, matchingOrderIndex)
+                    activeOrders: activeOrders,
+                    avgPrices: insertItem(state.avgPrices, avgPrices)
                 }, 
                 Object.assign({}, action, { quantity: action.quantity - matching.quantity })
             );
         } else {
             const updatedOrder = Object.assign({}, matching, { quantity: matching.quantity - action.quantity });
+            const activeOrders = updateItem(state.activeOrders, updatedOrder, matchingOrderIndex);
+            const avgPrices = { prices: calculateAveragePrices(activeOrders), timestamp: action.timestamp };
             return {
                 transactions: updatedTransactions,
-                activeOrders: updateItem(state.activeOrders, updatedOrder, matchingOrderIndex)
-            };            
+                activeOrders: activeOrders,
+                avgPrices: insertItem(state.avgPrices, avgPrices)
+            };
         }
     }
+}
+
+function calculateAveragePrices(orders: Order[]): PriceDictionary {
+    const ordersByProduct = _.groupBy(orders, (order) => order.product);
+    const products = _.map(ordersByProduct, (productOrders, product) => product);
+    const avgPrices = _.map(ordersByProduct, (productOrders, product) => {
+        const nom = _.sumBy(productOrders, (order) => order.price * order.quantity);
+        const denom = _.sumBy(productOrders, (order) => order.quantity);
+        return nom / denom;
+    });
+    return _.zipObject<PriceDictionary>(products, avgPrices);
 }
 
 function findMatchingOrder(orders: Order[], action: AddOrderAction): Order | null {
@@ -79,7 +102,7 @@ function orderFromAddAction(action: AddOrderAction): Order {
     };
 }
 
-function insertItem<T>(array: T[], item: T, index: number): T[] {
+function insertItem<T>(array: T[], item: T, index: number = array.length): T[] {
     return [
         ...array.slice(0, index),
         item,

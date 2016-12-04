@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Store } from 'redux';
+import * as _ from 'lodash';
 
 import { AppState } from '../reducers';
-import { Order, Direction } from '../model';
+import { Order, Direction, Products } from '../model';
 
 @Component({
   selector: 'app-order-screen',
@@ -12,30 +13,19 @@ import { Order, Direction } from '../model';
       <div class="panel-body">
         <table class="table table-bordered">
           <tr>
-            <th colspan="2">Crystals</th>
-            <th colspan="2">Mithril</th>
-            <th colspan="2">Mercury</th>
-            <th colspan="2">Credits</th>
+            <th colspan="2" *ngFor="let product of products">{{product}}</th>
           </tr>
           <tr>
-            <td>Bid</td>
-            <td>Ask</td>
-            <td>Bid</td>
-            <td>Ask</td>
-            <td>Bid</td>
-            <td>Ask</td>
-            <td>Bid</td>
-            <td>Ask</td>
+            <template let-product ngFor [ngForOf]="products">
+              <td>Bid</td>
+              <td>Ask</td>
+            </template>
           </tr>
-          <tr>
-            <td>\${{ prices['crystals'].bid }}</td>
-            <td>\${{ prices['crystals'].ask }}</td>
-            <td>\${{ prices['mithril'].bid }}</td>
-            <td>\${{ prices['mithril'].ask }}</td>
-            <td>\${{ prices['mercury'].bid }}</td>
-            <td>\${{ prices['mercury'].ask }}</td>
-            <td>\${{ prices['credits'].bid }}</td>
-            <td>\${{ prices['credits'].ask }}</td>
+          <tr *ngFor="let screenRow of screenRows">
+            <template let-product ngFor [ngForOf]="screenRow.products">
+              <td>{{ product.buy ? '$' + product.buy.price + '(' + product.buy.quantity + ')' : '-' }}</td>
+              <td>{{ product.sell ? '$' + product.sell.price + '(' + product.sell.quantity + ')' : '-' }}</td>
+            </template>
           </tr>
         </table>
       </div>
@@ -44,44 +34,50 @@ import { Order, Direction } from '../model';
   styles: []
 })
 export class OrderScreenComponent implements OnInit {
-  private prices: { [id: string]: Prices };
+  private screenRows: ScreenRow[];
+  private products: string[];
 
   constructor(
     @Inject('AppStore') private store: Store<AppState>
   ) {
-    this.prices = {
-      crystals: new Prices(null, null),
-      mithril: new Prices(null, null),
-      mercury: new Prices(null, null),
-      credits: new Prices(null, null)
-    };
+    this.products = Products;
+    this.calculateScreen();
   }
 
   ngOnInit() {
-    this.store.subscribe(() => {
-      const prices: { [id: string]: Prices } = {
-        crystals: new Prices(null, null),
-        mithril: new Prices(null, null),
-        mercury: new Prices(null, null),
-        credits: new Prices(null, null)
-      };
-      const orders = this.store.getState().screen.activeOrders;
-      for (var order of orders) {
-        var best = prices[order.product];
-        if (order.direction === Direction.Buy && (best.bid === null || order.price > best.bid)) {
-          best.bid = order.price;
-        }
-        if (order.direction === Direction.Sell && (best.ask === null || order.price < best.ask)) {
-          best.ask = order.price;
-        }
-      }
-      console.log(prices);
-      this.prices = prices;
-    });
+    this.store.subscribe(this.calculateScreen);
   }
+
+  private calculateScreen = () => {
+    const orders = this.store.getState().screen.activeOrders;
+    const ordersByProducts = _.groupBy(orders, 'product');
+    
+    const bestBuyOrders = _.map(Products, (product) => {
+      const productOrders = ordersByProducts[product];
+      const buyOrders = _.filter(productOrders, order => order.direction === Direction.Buy);
+      return _.orderBy(buyOrders, 'price', 'desc').slice(0, 5);
+    });
+
+    const bestSellOrders = _.map(Products, (product) => {
+      const productOrders = ordersByProducts[product];
+      const sellOrders = _.filter(productOrders, order => order.direction === Direction.Sell);
+      return _.orderBy(sellOrders, 'price', 'asc').slice(0, 5);
+    });
+
+    this.screenRows = _.map(_.range(0, 5), (idx) => {
+      const products = _.zipWith<ScreenRowProduct>(Products, bestBuyOrders, bestSellOrders, (product, bestBuy, bestSell) => {
+        return new ScreenRowProduct(bestBuy[idx], bestSell[idx]);
+      })
+      return new ScreenRow(products);
+    });
+  };
 
 }
 
-class Prices {
-  constructor(public bid: number | null, public ask: number | null) {}
+class ScreenRow {
+  constructor(public products: ScreenRowProduct[]) {}
+}
+
+class ScreenRowProduct {
+  constructor(public buy: Order, public sell: Order) {}
 }

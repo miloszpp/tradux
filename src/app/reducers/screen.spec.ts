@@ -3,7 +3,7 @@ import { screen } from './screen';
 import { addOrder } from '../actions';
 import { Order, Direction } from '../model';
 
-describe('OrderFormComponent', () => {
+describe('Reducer', () => {
 
     const sampleOrder: Order = {
         direction: Direction.Buy,
@@ -16,7 +16,8 @@ describe('OrderFormComponent', () => {
     it('should return the initial state', () => {
         expect(screen(undefined, { type: '' })).toEqual({
             transactions: [],
-            activeOrders: []
+            activeOrders: [],
+            avgPrices: []
         });
     });
 
@@ -26,11 +27,13 @@ describe('OrderFormComponent', () => {
             "gold",
             100,
             100,
-            Direction.Sell
+            Direction.Sell,
+            Date.now()
         );
         const initial = {
             transactions: [],
-            activeOrders: [ sampleOrder ]
+            activeOrders: [ sampleOrder ],
+            avgPrices: []
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(1);
@@ -43,11 +46,13 @@ describe('OrderFormComponent', () => {
             "gold",
             80,
             100,
-            Direction.Sell
+            Direction.Sell,
+            Date.now()
         );
         const initial = {
             transactions: [],
-            activeOrders: [ sampleOrder ]
+            activeOrders: [ sampleOrder ],
+            avgPrices: []
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(1);
@@ -66,11 +71,13 @@ describe('OrderFormComponent', () => {
             "gold",
             120,
             100,
-            Direction.Sell
+            Direction.Sell,
+            Date.now()
         );
         const initial = {
             transactions: [],
-            activeOrders: [ sampleOrder ]
+            activeOrders: [ sampleOrder ],
+            avgPrices: []
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(1);
@@ -89,11 +96,13 @@ describe('OrderFormComponent', () => {
             "gold",
             200,
             100,
-            Direction.Sell
+            Direction.Sell,
+            Date.now()
         );
         const initial = {
             transactions: [],
-            activeOrders: [ sampleOrder, Object.assign({}, sampleOrder) ]
+            activeOrders: [ sampleOrder, Object.assign({}, sampleOrder) ],
+            avgPrices: []
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(2);
@@ -106,11 +115,13 @@ describe('OrderFormComponent', () => {
             "gold",
             100,
             110,
-            Direction.Sell
+            Direction.Sell,
+            Date.now()
         );
         const initial = {
             transactions: [],
-            activeOrders: [ sampleOrder ]
+            activeOrders: [ sampleOrder ],
+            avgPrices: []
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(0);
@@ -123,11 +134,13 @@ describe('OrderFormComponent', () => {
             "gold",
             100,
             100,
-            Direction.Sell
+            Direction.Sell,
+            Date.now()
         );
         const initial = {
             transactions: [],
-            activeOrders: [ sampleOrder, Object.assign({}, sampleOrder) ]
+            activeOrders: [ sampleOrder, Object.assign({}, sampleOrder) ],
+            avgPrices: []
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(1);

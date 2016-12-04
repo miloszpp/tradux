@@ -1,14 +1,17 @@
 
-<div class="container">
+<div class="container-fluid">
   <div class="page-header">
     <h1>TRADUX <small>Real-time trading simulation</small></h1>
   </div>
   <div class="row">
-    <div class="col-sm-8">
-      <app-order-screen></app-order-screen>
-      <app-transaction-log></app-transaction-log>
-    </div>
     <div class="col-sm-4">
+        <app-price-chart></app-price-chart>
+    </div>
+    <div class="col-sm-5">
+      <app-order-screen></app-order-screen>
+      <app-transaction-log></app-transaction-log>      
+    </div>
+    <div class="col-sm-3">
       <app-order-form></app-order-form>
     </div>
   </div>

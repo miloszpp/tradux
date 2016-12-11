@@ -15,5 +15,23 @@
       <app-order-form></app-order-form>
     </div>
   </div>
+
+  <modal #authModal>
+    <modal-header>
+        <h1>Welcome to TRADUX</h1>
+    </modal-header>
+    <modal-content>
+      <p>Please enter a username. You won't be able to trade unless you enter a username.</p>
+      <form class="form-inline">
+          <div class="form-group">
+            <input #username required type="text" placeholder="enter username here" class="form-control" />
+          </div>
+      </form>
+    </modal-content>
+    <modal-footer>
+        <button class="btn btn-info" (click)="authModal.close()">Skip</button>
+        <button class="btn btn-primary" (click)="usernameEntered(username.value)">Confirm</button>
+    </modal-footer>
+</modal>
   
 </div>

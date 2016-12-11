@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Store } from 'redux';
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { FirebaseRef, AngularFire, FirebaseListObservable } from 'angularfire2';
 
 import { AppState } from '../reducers';
-import { Direction } from '../model';
+import { Direction, Products } from '../model';
 import { AddOrderAction, addOrder } from '../actions';
 
 @Component({
@@ -17,10 +17,7 @@ import { AddOrderAction, addOrder } from '../actions';
             <div class="form-group">
               <label for="product">Product</label>
               <select #product class="form-control" id="product">
-                <option value="crystals">Crystals</option>
-                <option value="mithril">Mithril</option>
-                <option value="mercury">Mercury</option>
-                <option value="credits">Credits</option>
+                <option *ngFor="let product of products" [value]="product">{{ product }}</option>
               </select>
             </div>
             <div class="form-group">
@@ -41,9 +38,11 @@ import { AddOrderAction, addOrder } from '../actions';
             <button 
               type="submit" 
               class="btn btn-default" 
+              [disabled]="!canSubmit"
               (click)="addOrder(product.value, direction.value, quantity.value, price.value)">
               Submit
             </button>
+            <span>{{ submitResult }}</span>
           </form>
         </div>
       </div>
@@ -53,22 +52,44 @@ import { AddOrderAction, addOrder } from '../actions';
 })
 export class OrderFormComponent implements OnInit {
 
+  private username: string | null;
+  private products: string[];
+  private canSubmit: Boolean;
+  private submitResult: string;
+
   constructor(
+    @Inject('AppStore') private store: Store<AppState>,
     private af: AngularFire
-  ) { }
+  ) {
+    this.products = Products;
+    this.canSubmit = false;
+    this.username = null;
+    this.submitResult = "";
+  }
 
   ngOnInit() {
+    this.store.subscribe(() => {
+      this.canSubmit = this.store.getState().control.isLogged;
+      this.username = this.store.getState().control.username;
+    });
   }
 
   addOrder(product: string, direction: string, quantity: string, price: string) {
-    this.af.database.list('/events').push(addOrder(
-      "milosz", 
+    const event = addOrder(
+      this.username, 
       product, 
       parseInt(quantity), 
       parseInt(price), 
       parseInt(direction),
       Date.now()
-    ));
+    );
+    this.af.database.list('/events').push(event).then(
+      () => {
+        this.submitResult = "Order added";
+      },
+      () => {
+        this.submitResult = "Validation failed";
+      });
   }
 
 }

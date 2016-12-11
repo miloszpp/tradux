@@ -23,11 +23,12 @@ import { Order, Direction, Products } from '../model';
           </tr>
           <tr *ngFor="let screenRow of screenRows">
             <template let-product ngFor [ngForOf]="screenRow.products">
-              <td>{{ product.buy ? '$' + product.buy.price + '(' + product.buy.quantity + ')' : '-' }}</td>
-              <td>{{ product.sell ? '$' + product.sell.price + '(' + product.sell.quantity + ')' : '-' }}</td>
+              <td>{{ product.buy ? '$' + product.buy.price + ' (' + product.buy.quantity + ')' : '-' }}</td>
+              <td>{{ product.sell ? '$' + product.sell.price + ' (' + product.sell.quantity + ')' : '-' }}</td>
             </template>
           </tr>
         </table>
+        <p>Each cell represents: <i>$price (quantity)</i></p>
       </div>
     </div>
   `,

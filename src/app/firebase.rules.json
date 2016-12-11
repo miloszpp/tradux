@@ -1,0 +1,32 @@
+{
+  "rules": {
+    "events": {
+    	".read": true,
+    	".write": true,
+      "$eventId": {
+        ".validate": "newData.hasChildren(['type', 'user', 'product', 'quantity', 'price', 'direction', 'timestamp'])",
+        "user": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "type": {
+          ".validate": "newData.isString() && newData.val() === 'AddOrderAction'"
+        },
+        "product": {
+          ".validate": "newData.isString() && (newData.val() === 'mithril' || newData.val() === 'crystals' || newData.val() === 'mercury' || newData.val() === 'credits')"
+        },
+        "quantity": {
+          ".validate": "newData.isNumber() && newData.val() >= 1"
+        },
+        "price": {
+          ".validate": "newData.isNumber() && newData.val() >= 1"
+        },
+        "direction": {
+          ".validate": "newData.isNumber() && (newData.val() == 0 || newData.val() == 1)"
+        },
+        "timestamp": {
+          ".validate": "newData.isNumber() && newData.val() <= now"
+        }
+      }
+    }
+  }
+}

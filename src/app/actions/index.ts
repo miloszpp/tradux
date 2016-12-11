@@ -2,7 +2,8 @@ import { Action } from 'redux';
 import { Direction } from '../model';
 
 export const Actions = {
-    addOrder: "AddOrderAction"
+    addOrder: "AddOrderAction",
+    authenticate: "AuthenticateAction"
 }
 
 export interface AddOrderAction extends Action {
@@ -15,6 +16,10 @@ export interface AddOrderAction extends Action {
     timestamp: number;
 }
 
+export interface AuthenticateAction extends Action {
+    username: String;
+}
+
 export function addOrder(
     user: string,
     product: string,
@@ -23,5 +28,9 @@ export function addOrder(
     direction: Direction,
     timestamp: number
     ): AddOrderAction {
-        return { user, product, quantity, price, direction, type: Actions.addOrder, timestamp }
+        return { type: Actions.addOrder, user, product, quantity, price, direction, timestamp }
     }
+
+export function authenticate(username: String): AuthenticateAction {
+    return { type: Actions.authenticate, username: username };
+}

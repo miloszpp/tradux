@@ -15,6 +15,7 @@ import { firebaseConfig } from './config/firebase';
 import { InventoryComponent } from './inventory/inventory.component';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { PriceChartComponent } from './price-chart/price-chart.component';
+import { ModalModule } from "ng2-modal";
 
 const appStore: Store<AppState> = createStore(rootReducer);
 
@@ -33,7 +34,8 @@ const appStore: Store<AppState> = createStore(rootReducer);
     FormsModule,
     HttpModule,
     ChartsModule,
-    AngularFireModule.initializeApp(firebaseConfig)
+    AngularFireModule.initializeApp(firebaseConfig),
+    ModalModule
   ],
   providers: [
     { provide: 'AppStore', useValue: appStore }

@@ -20,6 +20,7 @@ import { Order, Direction, Products } from '../model';
             chartType="line">
           </canvas>
         </div>
+        <p>Prices are calculated as weighted average of active orders.</p>
       </div>
     </div>
   `,

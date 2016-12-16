@@ -4,7 +4,7 @@ import { Store } from 'redux';
 import * as moment from 'moment';
 
 import { AppState } from '../reducers';
-import { Order, Direction, Products } from '../model';
+import { Order, Direction, Products } from '../../common/model';
 
 @Component({
   selector: 'app-price-chart',

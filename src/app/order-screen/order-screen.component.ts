@@ -3,7 +3,7 @@ import { Store } from 'redux';
 import * as _ from 'lodash';
 
 import { AppState } from '../reducers';
-import { Order, Direction, Products } from '../model';
+import { Order, Direction, Products } from '../../common/model';
 
 @Component({
   selector: 'app-order-screen',

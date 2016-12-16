@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Store } from 'redux';
 
 import { AppState } from '../reducers';
-import { Transaction } from '../model';
+import { Transaction } from '../../common/model';
 
 @Component({
   selector: 'app-transaction-log',

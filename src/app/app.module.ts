@@ -11,7 +11,7 @@ import { OrderFormComponent } from './order-form/order-form.component';
 import { OrderBookComponent } from './order-book/order-book.component';
 import { TransactionLogComponent } from './transaction-log/transaction-log.component';
 import { OrderScreenComponent } from './order-screen/order-screen.component';
-import { firebaseConfig } from './config/firebase';
+import { firebaseConfig } from '../common/config/firebase';
 import { InventoryComponent } from './inventory/inventory.component';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { PriceChartComponent } from './price-chart/price-chart.component';

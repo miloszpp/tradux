@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, NgZone } from '@angular/core';
 import { Store } from 'redux';
 
 import { AppState } from '../reducers';
-import { Order } from '../model';
+import { Order } from '../../common/model';
 
 @Component({
   selector: 'app-order-book',

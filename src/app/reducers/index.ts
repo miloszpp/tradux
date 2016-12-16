@@ -1,6 +1,8 @@
 import { combineReducers, Reducer } from 'redux';
 
-import { ScreenState, screen } from './screen';
+import { ScreenState } from '../../common/reducers/screen';
+
+import { screen } from './screen';
 import { ControlState, control } from './control';
 
 export interface AppState {

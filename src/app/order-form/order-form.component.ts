@@ -3,8 +3,10 @@ import { Store } from 'redux';
 import { FirebaseRef, AngularFire, FirebaseListObservable } from 'angularfire2';
 
 import { AppState } from '../reducers';
-import { Direction, Products } from '../model';
+import { Direction, Products } from '../../common/model';
 import { AddOrderAction, addOrder } from '../actions';
+
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-order-form',
@@ -81,9 +83,10 @@ export class OrderFormComponent implements OnInit {
       parseInt(quantity), 
       parseInt(price), 
       parseInt(direction),
-      Date.now()
+      0
     );
-    this.af.database.list('/events').push(event).then(
+    const eventToSend = _.assign({}, event, { 'timestamp': { '.sv': 'timestamp' } });
+    this.af.database.list('/events').push(eventToSend).then(
       () => {
         this.submitResult = "Order added";
       },

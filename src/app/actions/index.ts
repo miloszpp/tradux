@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { Direction } from '../model';
+import { Direction } from '../../common/model';
 
 export const Actions = {
     addOrder: "AddOrderAction",

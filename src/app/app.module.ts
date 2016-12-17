@@ -6,6 +6,8 @@ import { Store, createStore } from 'redux';
 import { AngularFireModule } from 'angularfire2';
 import { ModalModule } from 'ng2-modal';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
+import { CustomFormsModule } from 'ng2-validation'
 
 import { OrderFormComponent } from './order-form/order-form.component';
 import { OrderBookComponent } from './order-book/order-book.component';
@@ -32,10 +34,12 @@ import { CacheLoader } from './app.cache-loader';
   imports: [
     BrowserModule,
     FormsModule,
+    CustomFormsModule,
     HttpModule,
     ChartsModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    ModalModule
+    ModalModule,
+    ToastModule
   ],
   providers: [
     CacheLoader,

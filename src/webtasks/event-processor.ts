@@ -1,4 +1,5 @@
 import { firebaseConfig } from '../common/config/firebase';
+import { FirebaseAppSecret } from '../common/config/firebase-secret';
 import { addOrder, ScreenState, AddOrderParams } from '../common/reducers/screen';
 
 import * as _ from 'lodash';
@@ -6,8 +7,8 @@ import * as _ from 'lodash';
 var request = require('request');
 
 module.exports = function (callback) {
-    const eventsUrl = `${firebaseConfig.databaseURL}/events.json`;
-    const stateUrl = `${firebaseConfig.databaseURL}/state.json`;
+    const eventsUrl = `${firebaseConfig.databaseURL}/events.json?auth=${FirebaseAppSecret}`;
+    const stateUrl = `${firebaseConfig.databaseURL}/state.json?auth=${FirebaseAppSecret}`;
 
     const initialState: ScreenState = {
         activeOrders: [],

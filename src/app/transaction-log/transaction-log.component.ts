@@ -38,14 +38,17 @@ export class TransactionLogComponent implements OnInit {
 
   constructor(
     @Inject('AppStore') private store: Store<AppState>
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.store.subscribe(() => {
-      const transactions = this.store.getState().screen.transactions.slice(0);
-      transactions.sort((a, b) => b.date - a.date);
-      this.transactions = transactions.slice(0, 5);
-    });
+    this.updateTransactions();
+    this.store.subscribe(this.updateTransactions);
+  }
+
+  updateTransactions = () => {
+    const transactions = this.store.getState().screen.transactions;
+    transactions.sort((a, b) => b.date - a.date);
+    this.transactions = transactions.slice(0, 5);
   }
 
 }

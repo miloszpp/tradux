@@ -1,6 +1,6 @@
 import { combineReducers, Reducer } from 'redux';
 
-import { ScreenState } from '../../common/reducers/screen';
+import { ScreenState } from '../../common/model';
 
 import { screen } from './screen';
 import { ControlState, control } from './control';

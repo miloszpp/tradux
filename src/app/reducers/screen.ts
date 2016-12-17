@@ -1,8 +1,8 @@
 import { Action } from 'redux';
 import * as _ from "lodash";
 
-import { Order, Transaction, Direction, PriceDictionary } from '../../common/model';
-import { addOrder, ScreenState, AddOrderParams } from '../../common/reducers/screen';
+import { Order, Transaction, Direction, PriceDictionary, ScreenState } from '../../common/model';
+import { addOrder, AddOrderParams } from '../../common/reducers/screen';
 
 import { Actions } from '../actions';
 

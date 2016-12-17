@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { FirebaseRef } from 'angularfire2';
 
-import { ScreenState } from 'common/reducers/screen';
+import { ScreenState } from 'common/model';
 
 @Injectable()
 export class CacheLoader {

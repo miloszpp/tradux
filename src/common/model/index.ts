@@ -28,6 +28,8 @@ export interface ProductQuantity {
 
 export type PriceDictionary = { [id: string]: number };
 
+export type PricesEntry = { prices: PriceDictionary, timestamp: number };
+
 export type QuantityDictionary = { [id: string]: number };
 
 export enum Direction {
@@ -36,3 +38,10 @@ export enum Direction {
 }
 
 export const Products = [ 'mithril', 'crystals', 'mercury', 'credits' ];
+
+export interface ScreenState {
+    modified: number,
+    transactions: Transaction[];
+    activeOrders: Order[];
+    avgPrices: PricesEntry[]
+}

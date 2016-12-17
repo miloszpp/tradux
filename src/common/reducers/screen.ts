@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 
-import { Order, Transaction, Direction, PriceDictionary } from '../model';
+import { Order, Transaction, Direction, PriceDictionary, PricesEntry, ScreenState } from '../model';
+import * as l from '../utils/lists';
 
 export interface AddOrderParams {
     type: string;
@@ -12,12 +13,8 @@ export interface AddOrderParams {
     timestamp: number;
 }
 
-export interface ScreenState {
-    modified: number,
-    transactions: Transaction[];
-    activeOrders: Order[];
-    avgPrices: { prices: PriceDictionary, timestamp: number }[]
-}
+const transactionLogLength = 10;
+const pricesHistoryLength = 50;
 
 export function addOrder(state: ScreenState, action: AddOrderParams): ScreenState {
     if (action.quantity === 0) {
@@ -25,9 +22,9 @@ export function addOrder(state: ScreenState, action: AddOrderParams): ScreenStat
     }
     const matching = findMatchingOrder(state.activeOrders, action);
     if (matching === null) {
-        const activeOrders = insertItem(state.activeOrders, orderFromAddAction(action));
-        const avgPrices = { prices: calculateAveragePrices(activeOrders), timestamp: action.timestamp };
-        return (<any>Object).assign({}, state, { activeOrders: activeOrders, avgPrices: insertItem(state.avgPrices, avgPrices) });
+        const activeOrders = l.insertItem(state.activeOrders, orderFromAddAction(action));
+        const newState = _.assign({}, state, { activeOrders: activeOrders });
+        return newState;
     } else {
         const transaction: Transaction = {
             product: action.product,
@@ -38,42 +35,44 @@ export function addOrder(state: ScreenState, action: AddOrderParams): ScreenStat
             date: action.timestamp
         };
         const matchingOrderIndex = state.activeOrders.indexOf(matching);
-        const updatedTransactions = [ ...state.transactions, transaction ];
+        const updatedTransactions = state.transactions.length > transactionLogLength
+            ? l.insertItem(l.removeItem(state.transactions, 0), transaction)
+            : l.insertItem(state.transactions, transaction);
+        const updatedPrices = calculatePrices(state, transaction, action.timestamp);
+
         if (action.quantity >= matching.quantity) {
-            const activeOrders = removeItem(state.activeOrders, matchingOrderIndex);
-            const avgPrices = { prices: calculateAveragePrices(activeOrders), timestamp: action.timestamp };
-            return addOrder(
-                {
-                    transactions: updatedTransactions,
-                    activeOrders: activeOrders,
-                    avgPrices: insertItem(state.avgPrices, avgPrices),
-                    modified: state.modified
-                }, 
-                (<any>Object).assign({}, action, { quantity: action.quantity - matching.quantity })
-            );
-        } else {
-            const updatedOrder = (<any>Object).assign({}, matching, { quantity: matching.quantity - action.quantity });
-            const activeOrders = updateItem(state.activeOrders, updatedOrder, matchingOrderIndex);
-            const avgPrices = { prices: calculateAveragePrices(activeOrders), timestamp: action.timestamp };
-            return {
+            const activeOrders = l.removeItem(state.activeOrders, matchingOrderIndex);
+            const newState = _.assign({}, state, {
                 transactions: updatedTransactions,
                 activeOrders: activeOrders,
-                avgPrices: insertItem(state.avgPrices, avgPrices),
-                modified: state.modified
-            };
+                avgPrices: updatedPrices
+            });
+            const updatedAction = _.assign({}, action, { quantity: action.quantity - matching.quantity });
+            return addOrder(newState, updatedAction);
+        } else {
+            const updatedOrder = _.assign({}, matching, { quantity: matching.quantity - action.quantity });
+            const activeOrders = l.updateItem(state.activeOrders, updatedOrder, matchingOrderIndex);
+            const newState = _.assign({}, state, {
+                transactions: updatedTransactions,
+                activeOrders: activeOrders,
+                avgPrices: updatedPrices
+            });
+            return newState;
         }
     }
 }
 
-function calculateAveragePrices(orders: Order[]): PriceDictionary {
-    const ordersByProduct = _.groupBy(orders, (order) => order.product);
-    const products = _.map(ordersByProduct, (productOrders, product) => product);
-    const avgPrices = _.map(ordersByProduct, (productOrders, product) => {
-        const nom = _.sum(_.map(productOrders, (order) => order.price * order.quantity));
-        const denom = _.sum(_.map(productOrders, (order) => order.quantity));
-        return nom / denom;
-    });
-    return _.zipObject<PriceDictionary>(products, avgPrices);
+function calculatePrices(state: ScreenState, transaction: Transaction, timestamp: number): PricesEntry[] {
+    const lastPrices = state.avgPrices.length ? _.last(state.avgPrices).prices : {};
+    const newPrices = _.assign({}, lastPrices);
+    newPrices[transaction.product] = transaction.price;
+    const entry = { prices: newPrices, timestamp: timestamp };
+    const newEntries = l.insertItem(state.avgPrices, entry);
+    if (newEntries.length > pricesHistoryLength) {
+        return l.removeItem(newEntries, 0);
+    } else {
+        return newEntries;
+    }
 }
 
 function findMatchingOrder(orders: Order[], action: AddOrderParams): Order | null {
@@ -94,28 +93,4 @@ function orderFromAddAction(action: AddOrderParams): Order {
         quantity: action.quantity,
         user: action.user
     };
-}
-
-function insertItem<T>(array: T[], item: T, index: number = array.length): T[] {
-    return [
-        ...array.slice(0, index),
-        item,
-        ...array.slice(index)
-    ];
-}
-
-function removeItem<T>(array: T[], index: number) {
-    return [
-        ...array.slice(0, index),
-        ...array.slice(index + 1)
-    ];
-}
-
-function updateItem<T>(array: T[], newItem: T, itemIndex: number): T[] {
-    return array.map((item, index) => {
-        if (index !== itemIndex) {
-            return item;
-        }
-        return newItem;    
-    });
 }

@@ -1,6 +1,7 @@
 import { firebaseConfig } from '../common/config/firebase';
 import { FirebaseAppSecret } from '../common/config/firebase-secret';
-import { addOrder, ScreenState, AddOrderParams } from '../common/reducers/screen';
+import { ScreenState } from '../common/model';
+import { addOrder, AddOrderParams } from '../common/reducers/screen';
 
 import * as _ from 'lodash';
 

@@ -1,8 +1,16 @@
 {
   "rules": {
+    "state": {
+    	".read": true,
+    	".write": false,
+      "modified": {
+        ".validate": "newData.val() == now"
+      }
+    },
     "events": {
     	".read": true,
     	".write": true,
+      ".indexOn": ["timestamp"],
       "$eventId": {
         ".validate": "newData.hasChildren(['type', 'user', 'product', 'quantity', 'price', 'direction', 'timestamp'])",
         "user": {
@@ -15,16 +23,16 @@
           ".validate": "newData.isString() && (newData.val() === 'mithril' || newData.val() === 'crystals' || newData.val() === 'mercury' || newData.val() === 'credits')"
         },
         "quantity": {
-          ".validate": "newData.isNumber() && newData.val() >= 1"
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 999"
         },
         "price": {
-          ".validate": "newData.isNumber() && newData.val() >= 1"
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 999"
         },
         "direction": {
           ".validate": "newData.isNumber() && (newData.val() == 0 || newData.val() == 1)"
         },
         "timestamp": {
-          ".validate": "newData.isNumber() && newData.val() <= now"
+          ".validate": "newData.val() == now"
         }
       }
     }

@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import { screen } from './screen';
 import { addOrder } from '../actions';
-import { Order, Direction } from '../model';
+import { Order, Direction } from '../../common/model';
 
 describe('Reducer', () => {
 
@@ -17,7 +17,8 @@ describe('Reducer', () => {
         expect(screen(undefined, { type: '' })).toEqual({
             transactions: [],
             activeOrders: [],
-            avgPrices: []
+            avgPrices: [],
+            modified: 0
         });
     });
 
@@ -33,7 +34,8 @@ describe('Reducer', () => {
         const initial = {
             transactions: [],
             activeOrders: [ sampleOrder ],
-            avgPrices: []
+            avgPrices: [],
+            modified: 0
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(1);
@@ -52,7 +54,8 @@ describe('Reducer', () => {
         const initial = {
             transactions: [],
             activeOrders: [ sampleOrder ],
-            avgPrices: []
+            avgPrices: [],
+            modified: 0
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(1);
@@ -77,7 +80,8 @@ describe('Reducer', () => {
         const initial = {
             transactions: [],
             activeOrders: [ sampleOrder ],
-            avgPrices: []
+            avgPrices: [],
+            modified: 0
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(1);
@@ -102,7 +106,8 @@ describe('Reducer', () => {
         const initial = {
             transactions: [],
             activeOrders: [ sampleOrder, Object.assign({}, sampleOrder) ],
-            avgPrices: []
+            avgPrices: [],
+            modified: 0
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(2);
@@ -121,7 +126,8 @@ describe('Reducer', () => {
         const initial = {
             transactions: [],
             activeOrders: [ sampleOrder ],
-            avgPrices: []
+            avgPrices: [],
+            modified: 0
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(0);
@@ -140,7 +146,8 @@ describe('Reducer', () => {
         const initial = {
             transactions: [],
             activeOrders: [ sampleOrder, Object.assign({}, sampleOrder) ],
-            avgPrices: []
+            avgPrices: [],
+            modified: 0
         }
         const newState = screen(initial, action);
         expect(newState.transactions.length).toBe(1);

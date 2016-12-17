@@ -12,7 +12,11 @@ export class CacheLoader {
     public load() {
         return this.firebase.database().ref('state').once('value').then(snapshot => {
             this.preloadedState = snapshot.val();
-            console.log(`Received state snapshot with timestamp: ${this.preloadedState.modified}`);
+            if (this.preloadedState) {
+                console.log(`Received state snapshot with timestamp: ${this.preloadedState.modified}`);
+            } else {
+                console.log('Did not receive previous state snapshot');
+            }
         });
     }
 

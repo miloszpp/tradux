@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
     public toastr: ToastsManager, 
     vRef: ViewContainerRef
   ) {
-    const stateTimestamp = cacheLoader.preloadedState.modified;
+    const stateTimestamp = cacheLoader.preloadedState ? cacheLoader.preloadedState.modified : 0;
     this.listsRef = firebase.database()
       .ref('events')
       .orderByChild('timestamp')
@@ -37,7 +37,6 @@ export class AppComponent implements OnInit {
     this.listsRef.on('child_added', listSnap => {
       this.zone.run(() => {
         const action = <AddOrderAction>listSnap.val();
-        console.log('Received event: ', action);
         this.store.dispatch(action);
       });
     });

@@ -60,7 +60,7 @@ import { CacheLoader } from './app.cache-loader';
 export class AppModule { }
 
 function provideAppStore(loader: CacheLoader) {
-  // return () => {
+  if (loader.preloadedState) {
     const state: AppState = {
       screen: loader.preloadedState,
       control: {
@@ -69,5 +69,7 @@ function provideAppStore(loader: CacheLoader) {
       }
     }
     return createStore<AppState>(rootReducer, state);
-  // };
+  } else {
+    return createStore<AppState>(rootReducer);
+  }
 }

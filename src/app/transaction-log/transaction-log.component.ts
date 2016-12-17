@@ -46,7 +46,7 @@ export class TransactionLogComponent implements OnInit {
   }
 
   updateTransactions = () => {
-    const transactions = this.store.getState().screen.transactions;
+    const transactions = this.store.getState().screen.transactions.slice(0);
     transactions.sort((a, b) => b.date - a.date);
     this.transactions = transactions.slice(0, 5);
   }

@@ -33,3 +33,10 @@ testem.log
 #System Files
 .DS_Store
 Thumbs.db
+
+#Webtask deployment-related JS files
+/src/common/**/*.js
+/src/webtasks/**/*.js
+
+#Secret stuff
+/**/*secret*

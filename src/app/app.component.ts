@@ -4,6 +4,7 @@ import { FirebaseRef, AngularFire } from 'angularfire2';
 
 import { AppState } from './reducers';
 import { AddOrderAction, authenticate } from './actions';
+import { CacheLoader } from './app.cache-loader';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +18,14 @@ export class AppComponent implements OnInit {
   constructor(
     @Inject('AppStore') private store: Store<AppState>,
     @Inject(FirebaseRef) private firebase: any,
+    private cacheLoader: CacheLoader,
     private zone: NgZone
   ) {
-    this.listsRef = firebase.database().ref('/events');
+    const stateTimestamp = cacheLoader.preloadedState.modified;
+    this.listsRef = firebase.database()
+      .ref('events')
+      .orderByChild('timestamp')
+      .startAt(stateTimestamp);
   }
 
   ngOnInit() {

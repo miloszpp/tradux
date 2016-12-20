@@ -85,7 +85,7 @@ export class OrderFormComponent implements OnInit {
       product: this.model.product,
       quantity: this.model.quantity,
       price: this.model.price,
-      direction: this.model.direction,
+      direction: parseInt(this.model.direction),
       timestamp: { '.sv': 'timestamp' }
     };
     console.log('Dispatching event to Firebase', JSON.stringify(event));
@@ -103,7 +103,7 @@ export class OrderFormComponent implements OnInit {
 
 class OrderFormModel {
   product: string;
-  direction: Direction;
+  direction: string;
   quantity: number;
   price: number;
 
@@ -113,7 +113,7 @@ class OrderFormModel {
 
   public clear() {
     this.product = Products[0];
-    this.direction = Direction.Buy;
+    this.direction = "0";
     this.quantity = undefined;
     this.price = undefined;
   }

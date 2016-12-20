@@ -2,10 +2,7 @@
   "rules": {
     "state": {
     	".read": true,
-    	".write": false,
-      "modified": {
-        ".validate": "newData.val() == now"
-      }
+    	".write": false
     },
     "events": {
     	".read": true,
